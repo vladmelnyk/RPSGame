@@ -21,11 +21,4 @@ public class GameFactory {
         Player player = new HumanPlayer(playerName);
         return new Game(player, new SimpleComputer(random));
     }
-
-    //    Possible future implementation. More players could be added in further overloads
-//    public Game createGame(String player1Name, String player2Name) {
-//        Player player1 = new HumanPlayer(player1Name);
-//        Player player2 = new HumanPlayer(player2Name);
-//        return new Game(player1, player2);
-//    }
 }

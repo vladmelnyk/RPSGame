@@ -39,6 +39,9 @@ public class GameServiceTest {
 
     private GameService gameService;
 
+    private String playerName = "player1";
+    private Integer id = 0;
+
     @Before
     public void init() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -49,8 +52,6 @@ public class GameServiceTest {
 
     @Test
     public void shouldCreateGameSuccessfully() {
-        String playerName = "player1";
-        Integer id = 0;
         Game game = gameFactory.createGame(playerName);
         when(gameInMemoryRepository.create(game)).thenReturn(id);
 
@@ -61,13 +62,9 @@ public class GameServiceTest {
 
     @Test
     public void shouldPlayRoundSuccessfully() {
-        String playerName = "player1";
-        Integer id = 0;
         Game game = gameFactory.createGame(playerName);
         Choice playerChoice = SCISSORS;
-        Choice computerChoice = PAPER;
-        Round round = new Round(playerChoice, computerChoice, WON);
-
+        Round round = new Round(playerChoice, PAPER, WON);
         when(gameInMemoryRepository.findById(id)).thenReturn(Optional.of(game));
         when(roundService.createRound(any(), any())).thenReturn(round);
         game = GameHelper.updateGameWithRound(game, round);
@@ -80,7 +77,6 @@ public class GameServiceTest {
 
     @Test(expected = GameNotFoundException.class)
     public void throwsGameNotFoundException() {
-        Integer id = 0;
         Choice playerChoice = SCISSORS;
 
         when(gameInMemoryRepository.findById(id)).thenReturn(Optional.empty());
@@ -90,26 +86,20 @@ public class GameServiceTest {
 
     @Test(expected = GameOverException.class)
     public void throwsGameOverExceptionWhenComputerWon() {
-        String playerName = "player1";
-        Integer id = 0;
         Game game = gameFactory.createGame(playerName);
         game.setGameStatus(GameStatus.COMPUTER_WON);
         Choice playerChoice = SCISSORS;
         when(gameInMemoryRepository.findById(id)).thenReturn(Optional.of(game));
-
 
         gameService.play(id, playerChoice);
     }
 
     @Test(expected = GameOverException.class)
     public void throwsGameOverExceptionWhenPlayerWon() {
-        String playerName = "player1";
-        Integer id = 0;
         Game game = gameFactory.createGame(playerName);
         game.setGameStatus(GameStatus.PLAYER_WON);
         Choice playerChoice = SCISSORS;
         when(gameInMemoryRepository.findById(id)).thenReturn(Optional.of(game));
-
 
         gameService.play(id, playerChoice);
     }

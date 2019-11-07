@@ -37,6 +37,7 @@ public class GameControllerTest {
     @MockBean
     private GameService gameService;
 
+    private static final String CHOICE_NAME = "choice";
     private ObjectMapper objectMapper = new ObjectMapper();
     private Choice choice = SCISSORS;
     private Integer gameId = 0;
@@ -59,14 +60,14 @@ public class GameControllerTest {
     public void shouldPlayGameSuccessfully() throws Exception {
         when(gameService.play(gameId, choice)).thenReturn(game);
 
-        this.mockMvc.perform(post("/games/0").param("choice", choice.toString()))
+        this.mockMvc.perform(post("/games/0").param(CHOICE_NAME, choice.toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(game)));
     }
 
     @Test
     public void badRequestForUnknownChoice() throws Exception {
-        this.mockMvc.perform(post("/games/0").param("choice", "null"))
+        this.mockMvc.perform(post("/games/0").param(CHOICE_NAME, "null"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -74,7 +75,7 @@ public class GameControllerTest {
     public void testGameNotFound() throws Exception {
         when(gameService.play(gameId, choice)).thenThrow(GameNotFoundException.class);
 
-        this.mockMvc.perform(post("/games/0").param("choice", choice.toString()))
+        this.mockMvc.perform(post("/games/0").param(CHOICE_NAME, choice.toString()))
                 .andExpect(status().isNotFound());
     }
 
@@ -82,7 +83,7 @@ public class GameControllerTest {
     public void testGameIsOver() throws Exception {
         when(gameService.play(gameId, choice)).thenThrow(GameOverException.class);
 
-        this.mockMvc.perform(post("/games/0").param("choice", choice.toString()))
+        this.mockMvc.perform(post("/games/0").param(CHOICE_NAME, choice.toString()))
                 .andExpect(status().isConflict());
     }
 

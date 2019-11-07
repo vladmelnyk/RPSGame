@@ -22,9 +22,6 @@ public class Game {
         this.gameStatus = GameStatus.PLAYING;
     }
 
-    public Game() {
-    }
-
     public Game(GameStatus gameStatus, Player player, Computer computer, List<Round> rounds) {
         this.gameStatus = gameStatus;
         this.player = player;
