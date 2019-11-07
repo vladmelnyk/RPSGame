@@ -34,7 +34,7 @@ public class InMemoryRepositoryTest {
         Round round2 = new Round();
 
         Integer id = genericRepository.create(round);
-        Object savedRound = genericRepository.findById(id).get();
+        genericRepository.findById(id).get();
         genericRepository.update(id, round2);
         Object savedRound2 = genericRepository.findById(id).get();
 

@@ -16,6 +16,9 @@ import static com.company.model.enumeration.RoundResult.WON;
 class GameHelper {
     private static final int WIN_SCORE = 3;
 
+    private GameHelper() {
+    }
+
     static Game updateGameWithRound(Game game, Round round) {
         Player player = incrementScoreForPlayer(round, game.getPlayer());
         Computer computer = incrementScoreForComputer(round, game.getComputer());
